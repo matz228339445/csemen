@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лицей 40 · CS 1.6</title>
+    <!-- Шрифт, похожий на стиль старой школы -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1e1c; /* тёмно-зелёно-серый, как в старом HL/CS */
+            font-family: 'Roboto Condensed', 'Arial Narrow', sans-serif;
+            color: #e2e2e2;
+            line-height: 1.5;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-image: radial-gradient(circle at 20% 30%, #2c3530 0%, #0f1210 100%);
+        }
+
+        /* главная карточка сервера */
+        .server-card {
+            max-width: 850px;
+            width: 100%;
+            background: #202824;
+            border: 3px solid #d97706; /* оранжевая рамка — цвет "лицея" */
+            box-shadow: 0 10px 0 #0b0e0c, 0 0 0 2px #3f4a3e inset;
+            border-radius: 16px 16px 8px 8px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+
+        /* шапка в стиле кнопок меню CS */
+        .header {
+            background: #111613;
+            padding: 20px 25px;
+            border-bottom: 2px solid #d97706;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            box-shadow: inset 0 -2px 0 #2e3b2e;
+        }
+
+        .server-name {
+            font-family: 'Share Tech Mono', 'Courier New', monospace;
+            font-size: 2.3rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: #fbbf24;
+            text-shadow: 3px 3px 0 #92400e, 0 0 8px #ffb347;
+        }
+
+        .server-ip {
+            background: #1c251f;
+            padding: 6px 14px;
+            border-radius: 30px;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 1.2rem;
+            border: 1px solid #d97706;
+            color: #ddd;
+            box-shadow: inset 0 1px 3px #00000055;
+        }
+
+        .server-ip span {
+            color: #fbbf24;
+            font-weight: bold;
+        }
+
+        /* основная секция */
+        .content {
+            padding: 30px 25px;
+        }
+
+        /* статус как у CS (зелёный/оранжевый) */
+        .status-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            background: #1b231e;
+            padding: 12px 18px;
+            border-radius: 8px;
+            border-left: 8px solid #22c55e;
+            box-shadow: inset 0 0 6px #00000088;
+        }
+
+        .status-indicator {
+            width: 18px;
+            height: 18px;
+            background: #22c55e;
+            border-radius: 50%;
+            box-shadow: 0 0 12px #4ade80;
+            border: 1px solid #b0f0b0;
+            animation: pulse-green 2s infinite;
+        }
+
+        .status-text {
+            font-size: 1.4rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #e6f7e6;
+        }
+
+        .status-detail {
+            margin-left: auto;
+            font-family: 'Share Tech Mono', monospace;
+            background: #0f1411;
+            padding: 5px 14px;
+            border-radius: 20px;
+            color: #b9d4b9;
+            font-size: 1.1rem;
+            border: 1px solid #3f5e3f;
+        }
+
+        /* информационные блоки */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px 25px;
+            margin-bottom: 25px;
+        }
+
+        .info-item {
+            background: #1b241f;
+            padding: 12px 18px;
+            border-radius: 6px;
+            border-bottom: 3px solid #d97706;
+            box-shadow: inset 0 1px 3px #000000, 0 3px 0 #0d120f;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #a5b8a5;
+            margin-bottom: 6px;
+            font-weight: 400;
+        }
+
+        .info-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f3e9d2;
+            font-family: 'Share Tech Mono', monospace;
+            word-break: break-word;
+        }
+
+        .info-value small {
+            font-size: 1rem;
+            color: #b6a887;
+            font-weight: normal;
+            margin-left: 6px;
+        }
+
+        /* блок "правила" */
+        .rules {
+            background: #1f2a22;
+            border: 1px solid #3a4e3a;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 20px 0 25px;
+            box-shadow: inset 0 0 10px #00000055;
+        }
+
+        .rules h3 {
+            color: #fbbf24;
+            text-transform: uppercase;
+            font-size: 1.3rem;
+            letter-spacing: 2px;
+            border-bottom: 2px dashed #d97706;
+            padding-bottom: 8px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .rules ul {
+            list-style: none;
+        }
+
+        .rules li {
+            padding: 7px 0 7px 24px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24"><path fill="%23d97706" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>') left center no-repeat;
+            background-size: 16px;
+            border-bottom: 1px dotted #3a4e3a;
+            font-size: 1.05rem;
+        }
+
+        .rules li:last-child {
+            border-bottom: none;
+        }
+
+        /* кнопки подключения */
+        .connect-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            align-items: center;
+            justify-content: space-between;
+            background: #141a16;
+            padding: 18px 20px;
+            border-radius: 50px;
+            border: 1px solid #d97706;
+            margin-top: 10px;
+        }
+
+        .connect-label {
+            font-size: 1.2rem;
+            color: #eae1c6;
+            font-weight: bold;
+        }
+
+        .connect-btn {
+            background: #d97706;
+            color: #0e1410;
+            font-weight: bold;
+            font-size: 1.5rem;
+            font-family: 'Share Tech Mono', monospace;
+            text-decoration: none;
+            padding: 12px 28px;
+            border-radius: 40px;
+            border: none;
+            box-shadow: 0 6px 0 #7b4a0e, 0 2px 8px black;
+            transition: 0.08s linear;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            display: inline-block;
+            cursor: pointer;
+            border: 1px solid #ffcd7e;
+        }
+
+        .connect-btn:hover {
+            background: #f59e0b;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 0 #7b4a0e, 0 4px 10px black;
+        }
+
+        .connect-btn:active {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #7b4a0e, 0 2px 6px black;
+        }
+
+        .copy-hint {
+            color: #beb07c;
+            font-size: 0.9rem;
+            background: #232e26;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-family: 'Share Tech Mono', monospace;
+        }
+
+        /* футер */
+        .footer {
+            background: #0f1511;
+            padding: 12px 25px;
+            text-align: center;
+            border-top: 2px solid #4a3e2b;
+            font-size: 0.9rem;
+            color: #889988;
+            letter-spacing: 1px;
+        }
+
+        .footer a {
+            color: #fbbf24;
+            text-decoration: none;
+        }
+
+        @keyframes pulse-green {
+            0% { opacity: 1; box-shadow: 0 0 8px #22c55e; }
+            50% { opacity: 0.7; box-shadow: 0 0 18px #4ade80; }
+            100% { opacity: 1; box-shadow: 0 0 8px #22c55e; }
+        }
+
+        /* мобильная адаптация */
+        @media (max-width: 550px) {
+            .header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .status-row {
+                flex-wrap: wrap;
+            }
+            .connect-bar {
+                flex-direction: column;
+                text-align: center;
+            }
+            .server-name {
+                font-size: 1.8rem;
+            }
+        }
+
+        /* стилизация выделения ip */
+        .selectable-ip {
+            user-select: all;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="server-card">
+    <div class="header">
+        <div class="server-name">
+            🎓 ЛИЦЕЙ 40
+        </div>
+        <div class="server-ip">
+            <span>connect</span> 188.127.241.8:27173
+        </div>
+    </div>
+
+    <div class="content">
+        <!-- Статус: онлайн / количество игроков -->
+        <div class="status-row">
+            <div class="status-indicator"></div>
+            <div class="status-text">СЕРВЕР ОНЛАЙН</div>
+            <div class="status-detail">
+                👥 {{ online }}/{{ cap }} игроков
+            </div>
+        </div>
+
+        <!-- Основная информация в сетке -->
+        <div class="info-grid">
+            <div class="info-grid">
+                <div class="info-item">
+                    <div class="info-label">📍 Текущая карта</div>
+                    <div class="info-value">{{ map }} <small>24/7</small></div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">⚙️ Режим</div>
+                <div class="info-value">Classic · Public</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">🏫 Лицей 40</div>
+                <div class="info-value">только свои</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">🎧 Связь</div>
+                <div class="info-value">Discord / TeamSpeak</div>
+            </div>
+        </div>
+
+        <!-- Правила поведения (в стиле школьного сервера) -->
+        <div class="rules">
+            <h3>
+                <span>📜 УСТАВ ЛИЦЕЯ 40</span>
+            </h3>
+            <ul>
+                <li>Запрещены читы и сторонний софт — бан навсегда.</li>
+                <li>Уважай одноклассников и учителей — без оскорблений.</li>
+                <li>Микрофон включай только по делу (без флуда и музыки).</li>
+                <li>AFK более 5 раундов — кик.</li>
+                <li>Администрация: 10-А класс и «Трудовик».</li>
+            </ul>
+        </div>
+
+        <!-- Блок подключения (копирование IP) -->
+        <div class="connect-bar">
+            <span class="connect-label">⚡ ПОДКЛЮЧИТЬСЯ:</span>
+            <span class="copy-hint selectable-ip" id="serverIpDisplay" title="Нажми, чтобы скопировать IP">
+                188.127.241.8:27173
+            </span>
+            <button class="connect-btn" id="copyIpBtn">📋 КОПИРОВАТЬ IP</button>
+        </div>
+        <div style="margin-top: 12px; font-size: 0.9rem; text-align: right; color: #b1bda1;">
+            👆 Вставь в консоль (~) : connect 188.127.241.8:27173
+        </div>
+    </div>
+
+    <div class="footer">
+        <span>© 2025 Лицей №40 · CS 1.6 Oldschool</span> 
+        <span style="margin:0 8px">|</span>
+        <span><a href="#">VK сообщество</a> · <a href="#">Discord</a></span>
+    </div>
+</div>
+
+<!-- Простой скрипт для копирования IP по клику -->
+<script>
+    (function() {
+        const ipText = "188.127.241.8:27173";
+        const ipSpan = document.getElementById('serverIpDisplay');
+        const copyBtn = document.getElementById('copyIpBtn');
+
+        function copyIpToClipboard() {
+            // Используем современный Clipboard API
+            navigator.clipboard.writeText(ipText).then(() => {
+                // Визуальная обратная связь
+                if (copyBtn) {
+                    const originalText = copyBtn.textContent;
+                    copyBtn.textContent = '✅ СКОПИРОВАНО!';
+                    copyBtn.style.background = '#22c55e';
+                    copyBtn.style.boxShadow = '0 6px 0 #166534, 0 2px 8px black';
+                    setTimeout(() => {
+                        copyBtn.textContent = originalText;
+                        copyBtn.style.background = '#d97706';
+                        copyBtn.style.boxShadow = '0 6px 0 #7b4a0e, 0 2px 8px black';
+                    }, 1800);
+                }
+                // Дополнительно меняем стиль span
+                if (ipSpan) {
+                    ipSpan.style.backgroundColor = '#3b5e3b';
+                    setTimeout(() => ipSpan.style.backgroundColor = '', 400);
+                }
+            }).catch(err => {
+                alert('Не удалось скопировать. Выдели и скопируй вручную: ' + ipText);
+            });
+        }
+
+        if (copyBtn) {
+            copyBtn.addEventListener('click', copyIpToClipboard);
+        }
+
+        // Клик по самому IP тоже копирует
+        if (ipSpan) {
+            ipSpan.addEventListener('click', copyIpToClipboard);
+        }
+
+        // дополнительно: делаем span более кликабельным
+        if (ipSpan) {
+            ipSpan.style.cursor = 'pointer';
+            ipSpan.title = 'Кликни, чтобы скопировать адрес сервера';
+        }
+    })();
+</script>
+
+<!-- при желании можно менять IP, название карты и т.д. -->
+</body>
+</html>
